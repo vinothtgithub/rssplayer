@@ -1,0 +1,10 @@
+/**********************************
+Include following code into master state html/view file to complete interface setup.
+Dependencies:
+none
+**********************************/
+/**********CODE-BEGIN*************/
+<div ng-controller="FeeCostController" ng-init="OnLoad()">
+	<div ng-include src="'feecost/feecost.html'" />
+</div>
+/**********CODE-END*************/
