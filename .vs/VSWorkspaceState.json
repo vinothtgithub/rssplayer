@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\spa",
+    "\\spa\\inlineview",
+    "\\spa\\viewmodel",
+    "\\spa\\viewmodel\\home"
   ],
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }
