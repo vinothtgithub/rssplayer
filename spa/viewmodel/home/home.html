@@ -1,6 +1,6 @@
 ﻿<div id="content-main">
     <div class="position-absolute w-100 h-100 opacity-5" style="background-repeat: no-repeat;
-        background-size: cover;" ng-style="{'background-image': 'url(' + photo.regular + ')'}"/>
+        background-size: cover;" ng-style="{'background-image': 'url(' + photo.regular + ')'}" />
     <!--background-image: url(https://images.unsplash.com/photo-1580112646171-13522164ead4??ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzAyMH0)-->
     <!--<div class="Clock">
                             <a href="http://www.accuweather.com/en/de/cologne/50667/weather-forecast/180169" class="aw-widget-legal">
@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-body px-1 py-0" style="padding:5px !important; overflow:hidden;">
                         <ul class="list-group">
-                            <li class="list-group-item border-0 pt-0 pb-0" style="background:none !important;" ng-repeat="forecast in WeatherForecast1.list">
+                            <li class="list-group-item border-0 pt-0 pb-0" style="background:none !important;" ng-repeat="forecast in WeatherForecast1.list | limitTo:5">
                                 <div class="row mt-0">
                                     <div class="col-4 px-1 mt-0">
                                         <div class="row pl-2 pt-0">
@@ -42,12 +42,14 @@
                                     </div>
                                     <div class="col-8 pl-2 pt-2">
                                         <div class="row">
-                                            <span class="pr-2">High</span>{{ forecast.temp.day | number:0 }}° f
+                                            <span class="pl-2 pr-2 text-warning"><i class="fas fa-sun"></i></span>{{ forecast.temp.day | number:0 }}°
+                                            <span class="pl-4 pr-2 text-danger"><i class="fas fa-arrow-up"></i></span>{{ forecast.temp.max | number:0 }}°
                                         </div>
                                         <div class="row">
-                                            <span class="pr-2">Low</span>{{ forecast.temp.night | number:0 }}° f
+                                            <span class="pl-2 pr-2 text-info"><i class="fas fa-moon"></i></span>{{ forecast.temp.night | number:0 }}°
+                                            <span class="pl-4 pr-2 text-success"><i class="fas fa-arrow-down"></i></span>{{ forecast.temp.min | number:0 }}°
                                         </div>
-                                        <div class="row">
+                                        <div class="row pl-2">
                                             {{ forecast.weather[0].description }}
                                         </div>
                                     </div>
@@ -58,12 +60,12 @@
                     <div class="card-footer border-0 py-0 pl-3">
                         <div class="row">
                             <div class="col text-left pt-2" style="">
-                                <h4 class="text-info">{{ DateEST | date:"EEEE MM/dd/yyyy" }}</h4>
+                                <span style="color:#eac65d;font-size:1.8rem; line-height:1.1;">{{ DateEST | date:"EEEE MM/dd/yyyy" }}</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col text-left pt-0">
-                                <h3 class="text-info"><span class="pr-2"><i class="fas fa-clock"></i></span>{{ DateEST | date:"hh:mm:ss a" }}</h3>
+                                <h3 style="color:#eac65d;"><span class="pr-2"><i class="fas fa-clock"></i></span>{{ DateEST | date:"hh:mm:ss a" }}</h3>
                             </div>
                         </div>
                     </div>
@@ -72,54 +74,67 @@
             <div class="col-lg-8 pr-1 pl-1 mt-2">
                 <div class="card card-translucent-light border-0 text-center hover-shadow-lg mb-0">
                     <div class="card-body px-3 py-0" style="padding:5px !important;">
-                        <div class="h1 link-underline-warning py-1">{{ RssDataStock.feed.title }}</div>
-                        <div id="rssfeedStockCaurousel" class="carousel slide" style="height: 40vh !important;" data-interval="true" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#rssfeedCaurousel" class="bg-warning" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssData.items"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssDataStock.items">
-                                    <div class="d-block w-100">
-                                        <h2 class="py-1 px-5" style="color:#eac65d;">{{ rss.title }}</h2>
-                                        <h4 class="py-2 px-3">{{ rss.content }}</h4>
+                        <div class="position-absolute" style="width:50px; height:50px; background-image:url('https://www.softura.com/wp-content/uploads/2020/02/New_Logo_Softura-2.png'); background-repeat: no-repeat;
+                            background-size: cover;"></div>
+
+                        <div ng-if="RssDataStockReady">
+                            <div class="h3 link-underline-warning pt-4 pb-1">{{ RssDataStock.feed.title }}</div>
+                            <div id="rssfeedStockCaurousel" class="carousel slide" style="height: 41vh !important;" data-interval="true" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#rssfeedCaurousel" class="bg-warning" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssData.items"></li>
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div class="carousel-item" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssDataStock.items">
+                                        <div class="d-block w-100">
+                                            <h3 class="py-1 px-5" style="color:#eac65d;">{{ rss.title }}</h3>
+                                            <h5 class="py-2 px-3">{{ rss.content }}</h5>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <a class="carousel-control-prev" href="#rssfeedStockCaurousel" style="display:none;" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#rssfeedStockCaurousel" style="display:none;" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                                <a class="carousel-control-prev" href="#rssfeedStockCaurousel" style="display:none;" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#rssfeedStockCaurousel" style="display:none;" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
 
+                            </div>
                         </div>
 
-                        <div class="h1 link-underline-warning py-3">{{ RssData.feed.title }}</div>
-                        <div id="rssfeedCaurousel" class="carousel slide" style="height: 39vh !important;" data-interval="true" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#rssfeedCaurousel" class="bg-warning" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssData.items"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssData.items">
-                                    <div class="d-block w-100">
-                                        <h2 class="py-3 px-5" style="color:#eac65d;">{{ rss.title }}</h2>
-                                        <h4 class="py-3 px-3">{{ rss.content }}</h4>
+                        <div ng-if="RssDataReady">
+                            <div class="h3 link-underline-warning pt-1 pb-2">{{ RssData.feed.title }}</div>
+                            <div id="rssfeedCaurousel" class="carousel slide" style="height: 41vh !important;" data-interval="true" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#rssfeedCaurousel" class="bg-warning" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssData.items"></li>
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div class="carousel-item" ng-class="{ 'active' : $index === 0 }" ng-attr-data-slide-to="$index" ng-repeat="rss in RssData.items">
+                                        <div class="d-block w-100">
+                                            <h3 class="py-1 px-5" style="color:#eac65d;">{{ rss.title }}</h3>
+                                            <h5 class="py-1 px-3">{{ rss.content }}</h5>
+                                        </div>
                                     </div>
                                 </div>
+                                <a class="carousel-control-prev" href="#rssfeedCaurousel" style="display:none;" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#rssfeedCaurousel" style="display:none;" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
-                            <a class="carousel-control-prev" href="#rssfeedCaurousel" style="display:none;" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#rssfeedCaurousel" style="display:none;" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-
                         </div>
 
+                        <!--<div ng-if="MapDataReady" class="py-2">
+                            <canvas id="map" height="134"></canvas>
+                        </div>
+                        <div style="height:20vh !important;">
+                            <div class="infogram-embed" data-id="b838dc32-8be7-413d-a1fe-54fbb8698cf7" data-type="interactive" data-title="CASES MAP -- Mapping Coronavirus Cases in Michigan"></div>
+                            <script>!function (e, i, n, s) { var t = "InfogramEmbeds", d = e.getElementsByTagName("script")[0]; if (window[t] && window[t].initialized) window[t].process && window[t].process(); else if (!e.getElementById(n)) { var o = e.createElement("script"); o.async = 1, o.id = n, o.src = "https://e.infogram.com/js/dist/embed-loader-min.js", d.parentNode.insertBefore(o, d) } }(document, 0, "infogram-async");</script>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -141,7 +156,7 @@
                     </div>
                     <div class="card-body px-1 py-0" style="padding:5px !important; overflow:hidden;">
                         <ul class="list-group">
-                            <li class="list-group-item border-0 pt-0 pb-0" style="background:none !important;" ng-repeat="forecast in WeatherForecast2.list">
+                            <li class="list-group-item border-0 pt-0 pb-0" style="background:none !important;" ng-repeat="forecast in WeatherForecast2.list | limitTo:5">
                                 <div class="row mt-0">
                                     <div class="col-4 px-1 mt-0">
                                         <div class="row pl-2 pt-0">
@@ -153,12 +168,14 @@
                                     </div>
                                     <div class="col-8 pl-2 pt-2">
                                         <div class="row">
-                                            <span class="pr-2">High</span>{{ forecast.temp.day | number:0 }}° f
+                                            <span class="pl-2 pr-2 text-warning"><i class="fas fa-sun"></i></span>{{ forecast.temp.day | number:0 }}°
+                                            <span class="pl-4 pr-2 text-danger"><i class="fas fa-arrow-up"></i></span>{{ forecast.temp.max | number:0 }}°
                                         </div>
                                         <div class="row">
-                                            <span class="pr-2">Low</span>{{ forecast.temp.night | number:0 }}° f
+                                            <span class="pl-2 pr-2 text-info"><i class="fas fa-moon"></i></span>{{ forecast.temp.night | number:0 }}°
+                                            <span class="pl-4 pr-2 text-success"><i class="fas fa-arrow-down"></i></span>{{ forecast.temp.min | number:0 }}°
                                         </div>
-                                        <div class="row">
+                                        <div class="row pl-2">
                                             {{ forecast.weather[0].description }}
                                         </div>
                                     </div>
@@ -169,12 +186,12 @@
                     <div class="card-footer border-0 py-0 pl-3">
                         <div class="row">
                             <div class="col text-left pt-2" style="">
-                                <h4 class="text-info">{{ DateIST | date:"EEEE MM/dd/yyyy" }}</h4>
+                                <span style="color:#eac65d;font-size:1.8rem; line-height:1.1;">{{ DateIST | date:"EEEE MM/dd/yyyy" }}</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col text-left pt-0">
-                                <h3 class="text-info"><span class="pr-2"><i class="fas fa-clock"></i></span>{{ DateIST | date:"hh:mm:ss a" }}</h3>
+                                <h3 style="color:#eac65d;"><span class="pr-2"><i class="fas fa-clock"></i></span>{{ DateIST | date:"hh:mm:ss a" }}</h3>
                             </div>
                         </div>
                     </div>

@@ -28,16 +28,19 @@ RssApp.controller('HomeController', ['$rootScope', '$scope', '$state', '$statePa
     $scope.WeatherNow2 = {};
     $scope.RssData = {};
     $scope.RssDataStock = {};
+    $scope.MapData = {};
     $scope.RssDataReady = false;
+    $scope.RssDataStockReady = false;
+    $scope.MapDataReady = false;
 
     $interval(function () {
         $scope.DateEST = new Date(new Date().toLocaleString("en-US", { timeZone: "America/New_York" }));
         $scope.DateIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
     }, 1000);
 
-    $interval(function () {
-        $scope.RandomBackground();
-    }, 360000);
+    //$interval(function () {
+    //    $scope.RandomBackground();
+    //}, 360000);
 
     $interval(function () {
         $scope.GetWeather();
@@ -45,7 +48,7 @@ RssApp.controller('HomeController', ['$rootScope', '$scope', '$state', '$statePa
     }, 120000);
 
     $interval(function () {
-        if ($scope.RssDataReady) {
+        if ($scope.RssDataReady || $scope.RssDataStockReady) {
             $('.carousel-control-next').trigger('click');
         }
     }, 15000);
@@ -69,9 +72,10 @@ RssApp.controller('HomeController', ['$rootScope', '$scope', '$state', '$statePa
 
             $scope.ViewName = 'Home';
 
-            $scope.RandomBackground();
+            //$scope.RandomBackground();
             $scope.GetWeather();
             $scope.GetRssFeed();
+            //$scope.GetMapData();
         }
     });
 
@@ -233,7 +237,7 @@ RssApp.controller('HomeController', ['$rootScope', '$scope', '$state', '$statePa
 
                 $scope.LastUpdatedOn = $filter('date')(new Date(), 'MM/dd/yyyy hh:mm a');
 
-                $scope.RssDataReady = true;
+                $scope.RssDataStockReady = true;
             },
             function (failureresponse) {
 
@@ -243,5 +247,52 @@ RssApp.controller('HomeController', ['$rootScope', '$scope', '$state', '$statePa
             },
             null,
             '');
+    };
+    
+    $scope.GetMapData = function () {
+
+        $scope.MapData.title = 'COVID-19';
+
+        Promise.all([
+            fetch('https://unpkg.com/us-atlas/states-10m.json')
+                .then((r) => r.json()),
+            fetch('https://gist.githubusercontent.com/mbostock/9535021/raw/928a5f81f170b767162f8f52dbad05985eae9cac/us-state-capitals.csv')
+                .then((r) => r.text()).then((d) => Papa.parse(d, { dynamicTyping: true, header: true }).data)
+        ]).then(([us, data]) => {
+            const states = ChartGeo.topojson.feature(us, us.objects.states).features;
+
+            const chart = new Chart(document.getElementById("map").getContext("2d"), {
+                type: 'bubbleMap',
+                data: {
+                    labels: data.map((d) => d.description),
+                    datasets: [{
+                        outline: states,
+                        showOutline: true,
+                        backgroundColor: '#ff5630',
+                        outlineBorderColor: '#2684ff',
+                        data: data.map((d) => Object.assign(d, { r: Math.round(Math.random() * 10) })),
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            color: 'white',
+                            align: 'top',
+                            formatter: (v) => {
+                                return ""; //v.description;
+                            }
+                        }
+                    },
+                    scale: {
+                        projection: 'albersUsa'
+                    }
+                }
+            });
+        });
+
+        $scope.MapDataReady = true;
     };
 }]);
